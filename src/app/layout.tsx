@@ -1,26 +1,12 @@
 import type { Metadata } from 'next'
-import { DM_Sans, Syne, Playfair_Display } from 'next/font/google'
+import { Poppins } from 'next/font/google'
 import './globals.css'
 
-const dmSans = DM_Sans({
+const poppins = Poppins({
   subsets: ['latin'],
   variable: '--font-body',
   display: 'swap',
-})
-
-const syne = Syne({
-  subsets: ['latin'],
-  variable: '--font-display',
-  display: 'swap',
-  weight: ['400', '700', '800'],
-})
-
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-serif',
-  display: 'swap',
-  weight: ['400', '700'],
-  style: ['normal', 'italic'],
+  weight: ['300', '400', '500', '600', '700', '800'],
 })
 
 export const metadata: Metadata = {
@@ -49,10 +35,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html
-      lang="es"
-      className={`${dmSans.variable} ${syne.variable} ${playfair.variable}`}
-    >
+    <html lang="es" className={poppins.variable}>
       <head>
         <script
           type="application/ld+json"

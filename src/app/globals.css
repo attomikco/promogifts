@@ -22,8 +22,6 @@
   --color-light: var(--light);
   --color-pale: var(--pale);
   --font-sans: var(--font-body);
-  --font-display: var(--font-display);
-  --font-serif: var(--font-serif);
   --animate-marquee: marquee 25s linear infinite;
   --keyframes-marquee: { from { transform: translateX(0); } to { transform: translateX(-50%); } };
 }

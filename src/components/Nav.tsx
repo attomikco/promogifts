@@ -3,13 +3,10 @@ import Link from 'next/link'
 function Logo({ className }: { className?: string }) {
   return (
     <Link href="/" className={`leading-none ${className ?? ''}`}>
-      <span className="block text-sm font-extrabold text-[var(--brand)]">
+      <span className="block text-lg font-bold text-[var(--brand)]">
         Promo &amp;
       </span>
-      <span
-        className="block -mt-0.5 text-xl italic text-[var(--brand-light)]"
-        style={{ fontFamily: 'var(--font-serif)' }}
-      >
+      <span className="-mt-1 block text-[22px] font-bold italic text-[var(--brand-light)]">
         gifts
       </span>
     </Link>

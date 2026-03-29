@@ -84,7 +84,7 @@ export default async function ProductosPage({
         {/* Header */}
         <div className="border-b border-[var(--light)]/40 bg-white py-10">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
-            <h1 className="font-display text-3xl font-bold text-[var(--black)] sm:text-4xl">
+            <h1 className="text-3xl font-bold text-[var(--black)] sm:text-4xl">
               {activeCategory
                 ? `${activeCategory.emoji} ${activeCategory.label}`
                 : 'Todos los artículos'}
@@ -206,7 +206,7 @@ export default async function ProductosPage({
           ) : (
             <div className="py-20 text-center">
               <p className="text-5xl">📦</p>
-              <h2 className="mt-4 font-display text-xl font-bold text-[var(--black)]">
+              <h2 className="mt-4 text-xl font-bold text-[var(--black)]">
                 No se encontraron productos
               </h2>
               <p className="mt-2 text-[var(--mid)]">

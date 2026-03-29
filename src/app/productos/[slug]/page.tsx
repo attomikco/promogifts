@@ -165,7 +165,7 @@ export default async function ProductPage({ params }: Props) {
                 )}
               </div>
 
-              <h1 className="mt-3 font-display text-4xl font-black text-[var(--black)]">
+              <h1 className="mt-3 text-4xl font-black text-[var(--black)]">
                 {product.name}
               </h1>
 
@@ -176,7 +176,7 @@ export default async function ProductPage({ params }: Props) {
               )}
 
               <div className="mt-6">
-                <span className="font-display text-4xl font-black text-[var(--brand)]">
+                <span className="text-4xl font-black text-[var(--brand)]">
                   ${product.price} MXN
                 </span>
                 <p className="mt-1 text-sm text-[var(--mid)]">
@@ -246,7 +246,7 @@ export default async function ProductPage({ params }: Props) {
           {/* Full description */}
           {product.ai_description && (
             <section className="mt-16">
-              <h2 className="font-display text-2xl font-bold text-[var(--black)]">
+              <h2 className="text-2xl font-bold text-[var(--black)]">
                 Descripción del producto
               </h2>
               <div className="mt-4 max-w-3xl leading-relaxed text-[var(--mid)]">
@@ -258,7 +258,7 @@ export default async function ProductPage({ params }: Props) {
           {/* Use cases */}
           {product.ai_use_cases.length > 0 && (
             <section className="mt-12">
-              <h2 className="font-display text-2xl font-bold text-[var(--black)]">
+              <h2 className="text-2xl font-bold text-[var(--black)]">
                 Casos de uso
               </h2>
               <div className="mt-4 flex flex-wrap gap-2">
@@ -279,7 +279,7 @@ export default async function ProductPage({ params }: Props) {
         {related.length > 0 && (
           <section className="border-t border-[var(--light)]/40 bg-[var(--pale)] py-16">
             <div className="mx-auto max-w-7xl px-4 sm:px-6">
-              <h2 className="font-display text-2xl font-bold text-[var(--black)]">
+              <h2 className="text-2xl font-bold text-[var(--black)]">
                 Productos relacionados
               </h2>
               <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">

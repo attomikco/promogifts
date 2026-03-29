@@ -71,12 +71,18 @@ export default async function HomePage() {
     .eq('is_published', true)
     .in('category', catSlugs)
     .not('images', 'eq', '{}')
-    .limit(100)
+    .order('created_at', { ascending: false })
+    .limit(200)
 
   if (sampleProducts) {
     for (const p of sampleProducts) {
-      if (!categoryImages[p.category] && p.images?.[0]) {
-        categoryImages[p.category] = p.images[0]
+      const img = p.images?.[0]
+      if (
+        !categoryImages[p.category] &&
+        typeof img === 'string' &&
+        img.startsWith('http')
+      ) {
+        categoryImages[p.category] = img
       }
     }
   }
@@ -106,7 +112,7 @@ export default async function HomePage() {
                     className="flex aspect-square items-center justify-center p-4"
                     style={{ backgroundColor: color }}
                   >
-                    {img ? (
+                    {typeof img === 'string' && img.startsWith('http') ? (
                       <div className="relative h-full w-full overflow-hidden rounded-lg bg-white">
                         <Image
                           src={img}
@@ -163,7 +169,7 @@ export default async function HomePage() {
       {featuredProducts.length > 0 && (
         <section className="py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
-            <h2 className="font-display text-3xl font-bold text-[var(--black)]">
+            <h2 className="text-3xl font-bold text-[var(--black)]">
               Productos Destacados
             </h2>
             <p className="mt-2 text-[var(--mid)]">
@@ -182,7 +188,7 @@ export default async function HomePage() {
       {recentProducts.length > 0 && (
         <section className="bg-[var(--pale)] py-16">
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
-            <h2 className="font-display text-3xl font-bold text-[var(--black)]">
+            <h2 className="text-3xl font-bold text-[var(--black)]">
               Productos Recientes
             </h2>
             <p className="mt-2 text-[var(--mid)]">
@@ -200,7 +206,7 @@ export default async function HomePage() {
       {/* CTA Banner */}
       <section className="bg-[var(--brand)] py-16">
         <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
-          <h2 className="font-display text-3xl font-bold text-white sm:text-4xl">
+          <h2 className="text-3xl font-bold text-white sm:text-4xl">
             ¿Listo para hacer memorable tu marca?
           </h2>
           <p className="mt-4 text-lg text-white/80">

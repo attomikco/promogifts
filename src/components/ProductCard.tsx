@@ -30,7 +30,7 @@ export default function ProductCard({ product }: { product: Product }) {
         <h3 className="font-semibold leading-snug text-[var(--black)] group-hover:text-[var(--brand)]">
           {product.name}
         </h3>
-        <p className="mt-2 font-display text-lg font-bold text-[var(--brand)]">
+        <p className="mt-2 text-lg font-bold text-[var(--brand)]">
           ${Number(product.price).toFixed(2)} MXN
         </p>
       </div>

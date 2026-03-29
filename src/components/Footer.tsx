@@ -10,13 +10,10 @@ export default function Footer() {
         {/* Col 1 — Logo */}
         <div>
           <Link href="/" className="leading-none">
-            <span className="block text-sm font-extrabold text-[var(--brand-light)]">
+            <span className="block text-lg font-bold text-[var(--brand-light)]">
               Promo &amp;
             </span>
-            <span
-              className="-mt-0.5 block text-xl italic text-white"
-              style={{ fontFamily: 'var(--font-serif)' }}
-            >
+            <span className="-mt-1 block text-[22px] font-bold italic text-white">
               gifts
             </span>
           </Link>
