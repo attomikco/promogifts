@@ -1,7 +1,10 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import type { Product } from '@/lib/types'
 
 export default function ProductCard({ product }: { product: Product }) {
+  const hasImage = product.images?.length > 0 && product.images[0]
+
   return (
     <Link
       href={`/productos/${product.slug}`}
@@ -9,7 +12,17 @@ export default function ProductCard({ product }: { product: Product }) {
     >
       {/* Image area */}
       <div className="relative flex aspect-[4/3] items-center justify-center bg-[var(--pale)]">
-        <span className="text-6xl">{'\uD83C\uDF81'}</span>
+        {hasImage ? (
+          <Image
+            src={product.images[0]}
+            alt={product.name}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-cover"
+          />
+        ) : (
+          <span className="text-6xl">{'\uD83C\uDF81'}</span>
+        )}
 
         {product.is_featured && (
           <span className="absolute left-3 top-3 rounded-full bg-[var(--brand-pale)] px-2.5 py-0.5 text-xs font-semibold text-[var(--brand)]">

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import Nav from '@/components/Nav'
 import ProductCard from '@/components/ProductCard'
@@ -133,8 +134,19 @@ export default async function ProductPage({ params }: Props) {
         <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
           <div className="grid gap-10 lg:grid-cols-2">
             {/* Left — Image */}
-            <div className="flex aspect-square items-center justify-center rounded-2xl bg-[var(--pale)]">
-              <span className="text-8xl">🎁</span>
+            <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-2xl bg-[var(--pale)]">
+              {product.images?.length > 0 && product.images[0] ? (
+                <Image
+                  src={product.images[0]}
+                  alt={product.name}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
+                  priority
+                />
+              ) : (
+                <span className="text-8xl">🎁</span>
+              )}
             </div>
 
             {/* Right — Info */}

@@ -9,7 +9,9 @@
     "lint": "eslint",
     "scrape": "npx tsx scripts/scrape.ts",
     "enrich-all": "npx tsx scripts/enrich-all.ts",
-    "import-csv": "npx tsx scripts/import-csv.ts"
+    "import-csv": "npx tsx scripts/import-csv.ts",
+    "upload-images": "npx tsx scripts/upload-images.ts",
+    "fix-image-urls": "npx tsx scripts/fix-image-urls.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",

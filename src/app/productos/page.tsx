@@ -6,23 +6,55 @@ import Footer from '@/components/Footer'
 import { createClient } from '@/lib/supabase/server'
 import { CATEGORIES, type Product } from '@/lib/types'
 
+const PER_PAGE = 24
+
 export const metadata: Metadata = {
   title: 'Catálogo de Artículos Promocionales',
   description:
     'Explora nuestro catálogo completo de artículos promocionales: termos, bolsas, plumas, tecnología y más. Personalización de logo y envíos a todo México.',
 }
 
+function buildHref(params: { cat?: string; q?: string; page?: number }) {
+  const sp = new URLSearchParams()
+  if (params.cat) sp.set('cat', params.cat)
+  if (params.q) sp.set('q', params.q)
+  if (params.page && params.page > 1) sp.set('page', String(params.page))
+  const qs = sp.toString()
+  return `/productos${qs ? `?${qs}` : ''}`
+}
+
+function getPageNumbers(current: number, total: number): (number | '...')[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1)
+
+  const pages: (number | '...')[] = [1]
+
+  if (current > 3) pages.push('...')
+
+  const start = Math.max(2, current - 1)
+  const end = Math.min(total - 1, current + 1)
+  for (let i = start; i <= end; i++) pages.push(i)
+
+  if (current < total - 2) pages.push('...')
+
+  pages.push(total)
+  return pages
+}
+
 export default async function ProductosPage({
   searchParams,
 }: {
-  searchParams: Promise<{ cat?: string; q?: string }>
+  searchParams: Promise<{ cat?: string; q?: string; page?: string }>
 }) {
-  const { cat, q } = await searchParams
+  const { cat, q, page: pageParam } = await searchParams
+  const currentPage = Math.max(1, parseInt(pageParam || '1', 10) || 1)
+  const from = (currentPage - 1) * PER_PAGE
+  const to = from + PER_PAGE - 1
+
   const supabase = await createClient()
 
   let query = supabase
     .from('products')
-    .select('*')
+    .select('*', { count: 'exact' })
     .eq('is_published', true)
     .order('created_at', { ascending: false })
 
@@ -34,10 +66,15 @@ export default async function ProductosPage({
     query = query.textSearch('name', q, { config: 'spanish' })
   }
 
-  const { data } = await query
+  const { data, count } = await query.range(from, to)
   const products = (data ?? []) as Product[]
+  const totalCount = count ?? 0
+  const totalPages = Math.max(1, Math.ceil(totalCount / PER_PAGE))
 
   const activeCategory = CATEGORIES.find((c) => c.slug === cat)
+  const showingFrom = totalCount === 0 ? 0 : from + 1
+  const showingTo = Math.min(from + PER_PAGE, totalCount)
+  const pageNumbers = getPageNumbers(currentPage, totalPages)
 
   return (
     <>
@@ -53,8 +90,9 @@ export default async function ProductosPage({
                 : 'Todos los artículos'}
             </h1>
             <p className="mt-2 text-[var(--mid)]">
-              {products.length} producto{products.length !== 1 ? 's' : ''}{' '}
-              encontrado{products.length !== 1 ? 's' : ''}
+              {totalCount.toLocaleString('es-MX')} producto
+              {totalCount !== 1 ? 's' : ''} encontrado
+              {totalCount !== 1 ? 's' : ''}
             </p>
           </div>
         </div>
@@ -93,11 +131,78 @@ export default async function ProductosPage({
         {/* Products grid */}
         <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
           {products.length > 0 ? (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {products.map((p) => (
-                <ProductCard key={p.id} product={p} />
-              ))}
-            </div>
+            <>
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                {products.map((p) => (
+                  <ProductCard key={p.id} product={p} />
+                ))}
+              </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="mt-12 flex flex-col items-center gap-4">
+                  <p className="text-sm text-[var(--mid)]">
+                    Mostrando {showingFrom.toLocaleString('es-MX')}-
+                    {showingTo.toLocaleString('es-MX')} de{' '}
+                    {totalCount.toLocaleString('es-MX')} productos
+                  </p>
+
+                  <div className="flex items-center gap-1">
+                    {/* Previous */}
+                    {currentPage > 1 ? (
+                      <Link
+                        href={buildHref({ cat, q, page: currentPage - 1 })}
+                        className="rounded-lg border border-[var(--light)] px-3 py-2 text-sm font-medium text-[var(--mid)] transition hover:bg-[var(--pale)]"
+                      >
+                        Anterior
+                      </Link>
+                    ) : (
+                      <span className="cursor-not-allowed rounded-lg border border-[var(--light)]/50 px-3 py-2 text-sm font-medium text-[var(--light)]">
+                        Anterior
+                      </span>
+                    )}
+
+                    {/* Page numbers */}
+                    {pageNumbers.map((p, i) =>
+                      p === '...' ? (
+                        <span
+                          key={`dots-${i}`}
+                          className="px-2 text-sm text-[var(--mid)]"
+                        >
+                          ...
+                        </span>
+                      ) : (
+                        <Link
+                          key={p}
+                          href={buildHref({ cat, q, page: p })}
+                          className={`flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition ${
+                            p === currentPage
+                              ? 'bg-[var(--brand)] text-white'
+                              : 'text-[var(--mid)] hover:bg-[var(--pale)]'
+                          }`}
+                        >
+                          {p}
+                        </Link>
+                      )
+                    )}
+
+                    {/* Next */}
+                    {currentPage < totalPages ? (
+                      <Link
+                        href={buildHref({ cat, q, page: currentPage + 1 })}
+                        className="rounded-lg border border-[var(--light)] px-3 py-2 text-sm font-medium text-[var(--mid)] transition hover:bg-[var(--pale)]"
+                      >
+                        Siguiente
+                      </Link>
+                    ) : (
+                      <span className="cursor-not-allowed rounded-lg border border-[var(--light)]/50 px-3 py-2 text-sm font-medium text-[var(--light)]">
+                        Siguiente
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+            </>
           ) : (
             <div className="py-20 text-center">
               <p className="text-5xl">📦</p>
