@@ -11,7 +11,7 @@ export default function ProductCard({ product }: { product: Product }) {
       className="group flex flex-col overflow-hidden rounded-2xl border border-[var(--light)]/60 bg-white transition hover:shadow-lg"
     >
       {/* Image area */}
-      <div className="relative flex aspect-[4/3] items-center justify-center bg-[var(--pale)]">
+      <div className="relative flex aspect-square items-center justify-center bg-[var(--pale)]">
         {hasImage ? (
           <Image
             src={product.images[0]}
