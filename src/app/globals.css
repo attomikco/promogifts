@@ -1,26 +1,48 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --brand: #D94F2B;
+  --brand-dark: #A83820;
+  --brand-pale: #FEF4F1;
+  --brand-light: #F5C4B5;
+  --black: #16140F;
+  --mid: #6B6358;
+  --light: #D4CFC8;
+  --pale: #F7F5F2;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-brand: var(--brand);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-pale: var(--brand-pale);
+  --color-brand-light: var(--brand-light);
+  --color-black: var(--black);
+  --color-mid: var(--mid);
+  --color-light: var(--light);
+  --color-pale: var(--pale);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+  --animate-marquee: marquee 25s linear infinite;
+  --keyframes-marquee: { from { transform: translateX(0); } to { transform: translateX(-50%); } };
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.brand-gradient {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(217, 79, 43, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(168, 56, 32, 0.10) 0%, transparent 50%);
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 25s linear infinite;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body), sans-serif;
+  color: var(--black);
+  background: #ffffff;
 }
