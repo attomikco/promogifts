@@ -9,20 +9,27 @@ export default function Footer() {
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:grid-cols-2 sm:px-6 lg:grid-cols-4">
         {/* Col 1 — Logo */}
         <div>
-          <Link href="/" className="text-xl font-bold tracking-tight">
-            <span className="text-[var(--brand)]">PROMO</span>
-            <span className="text-white">GIFTS</span>
+          <Link href="/" className="leading-none">
+            <span className="block text-sm font-extrabold text-[var(--brand-light)]">
+              Promo &amp;
+            </span>
+            <span
+              className="-mt-0.5 block text-xl italic text-white"
+              style={{ fontFamily: 'var(--font-serif)' }}
+            >
+              gifts
+            </span>
           </Link>
           <p className="mt-4 text-sm leading-relaxed">
-            Art&iacute;culos promocionales y regalos corporativos con
-            personalizaci&oacute;n de logo para empresas en M&eacute;xico.
+            Artículos promocionales y regalos corporativos con
+            personalización de logo para empresas en México.
           </p>
         </div>
 
-        {/* Col 2 — Categor&iacute;as */}
+        {/* Col 2 — Categorías */}
         <div>
           <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white">
-            Categor&iacute;as
+            Categorías
           </h4>
           <ul className="space-y-2 text-sm">
             {FOOTER_CATEGORIES.map((cat) => (

@@ -1,35 +1,62 @@
 @import "tailwindcss";
 
 :root {
-  --brand: #D94F2B;
-  --brand-dark: #A83820;
-  --brand-pale: #FEF4F1;
-  --brand-light: #F5C4B5;
-  --black: #16140F;
-  --mid: #6B6358;
-  --light: #D4CFC8;
-  --pale: #F7F5F2;
+  --brand: #3D3CB8;
+  --brand-light: #5BC8F5;
+  --brand-dark: #2D2C9A;
+  --brand-pale: #EDEDFA;
+  --black: #1A1A2E;
+  --mid: #6B6B8A;
+  --light: #E0E0F0;
+  --pale: #F5F5FA;
+  --white: #FFFFFF;
 }
 
 @theme inline {
   --color-brand: var(--brand);
   --color-brand-dark: var(--brand-dark);
-  --color-brand-pale: var(--brand-pale);
   --color-brand-light: var(--brand-light);
+  --color-brand-pale: var(--brand-pale);
   --color-black: var(--black);
   --color-mid: var(--mid);
   --color-light: var(--light);
   --color-pale: var(--pale);
   --font-sans: var(--font-body);
   --font-display: var(--font-display);
+  --font-serif: var(--font-serif);
   --animate-marquee: marquee 25s linear infinite;
   --keyframes-marquee: { from { transform: translateX(0); } to { transform: translateX(-50%); } };
 }
 
 .brand-gradient {
   background:
-    radial-gradient(ellipse at 20% 50%, rgba(217, 79, 43, 0.15) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 50%, rgba(168, 56, 32, 0.10) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 50%, rgba(91, 200, 245, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(61, 60, 184, 0.15) 0%, transparent 50%);
+}
+
+/* Particle network background */
+.hero-particles {
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px),
+    radial-gradient(circle, rgba(91,200,245,0.1) 1px, transparent 1px);
+  background-size: 40px 40px, 80px 80px;
+  background-position: 0 0, 20px 20px;
+}
+
+.hero-particles::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(45deg, rgba(91,200,245,0.05) 1px, transparent 1px),
+    linear-gradient(-45deg, rgba(91,200,245,0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: particle-drift 20s linear infinite;
+}
+
+@keyframes particle-drift {
+  from { transform: translate(0, 0); }
+  to { transform: translate(60px, 60px); }
 }
 
 @keyframes marquee {
