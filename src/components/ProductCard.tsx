@@ -2,8 +2,18 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Product } from '@/lib/types'
 
-export default function ProductCard({ product }: { product: Product }) {
-  const hasImage = product.images?.length > 0 && product.images[0]
+export default function ProductCard({
+  product,
+  priority = false,
+}: {
+  product: Product
+  priority?: boolean
+}) {
+  const hasImage =
+    product.images?.length > 0 &&
+    typeof product.images[0] === 'string' &&
+    product.images[0].startsWith('http')
+  const altText = `${product.name} - Artículo Promocional Personalizado`
 
   return (
     <Link
@@ -15,10 +25,13 @@ export default function ProductCard({ product }: { product: Product }) {
         {hasImage ? (
           <Image
             src={product.images[0]}
-            alt={product.name}
+            alt={altText}
+            title={product.name}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
             className="object-cover"
+            loading={priority ? 'eager' : 'lazy'}
+            priority={priority}
           />
         ) : (
           <span className="text-5xl">📦</span>

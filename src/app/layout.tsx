@@ -27,6 +27,16 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  other: {
+    'geo.region': 'MX',
+    'geo.country': 'Mexico',
+    language: 'es-MX',
+  },
+  alternates: {
+    languages: {
+      'es-MX': 'https://promogifts.com.mx',
+    },
+  },
 }
 
 export default function RootLayout({
