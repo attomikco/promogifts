@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Nav from '@/components/Nav'
 import Hero from '@/components/Hero'
 import ProductCard from '@/components/ProductCard'
+import RandomProducts from '@/components/RandomProducts'
 import ContactForm from '@/components/ContactForm'
 import Footer from '@/components/Footer'
 import { createClient } from '@/lib/supabase/server'
@@ -323,15 +324,11 @@ export default async function HomePage() {
       {/* Featured products */}
       {featuredProducts.length > 0 && (
         <section className="py-16">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6">
-            <h2 className="text-3xl font-bold text-[var(--black)]">Productos Destacados</h2>
-            <p className="mt-2 text-[var(--mid)]">La mayor variedad de productos promocionales en México</p>
-            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {featuredProducts.map((p, i) => (
-                <ProductCard key={p.id} product={p} priority={i < 4} />
-              ))}
-            </div>
-          </div>
+          <RandomProducts
+            initial={featuredProducts}
+            title="Productos Destacados"
+            subtitle="La mayor variedad de productos promocionales en México"
+          />
         </section>
       )}
 
@@ -419,15 +416,11 @@ export default async function HomePage() {
       {/* Recent products */}
       {recentProducts.length > 0 && (
         <section className="py-16">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6">
-            <h2 className="text-3xl font-bold text-[var(--black)]">Productos Destacados</h2>
-            <p className="mt-2 text-[var(--mid)]">La mayor variedad de productos promocionales en México</p>
-            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {recentProducts.map((p) => (
-                <ProductCard key={p.id} product={p} />
-              ))}
-            </div>
-          </div>
+          <RandomProducts
+            initial={recentProducts}
+            title="Explora Nuestro Catálogo"
+            subtitle="Más de 1,000 artículos promocionales para tu empresa"
+          />
         </section>
       )}
 
