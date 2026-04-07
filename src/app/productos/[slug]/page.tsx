@@ -77,6 +77,7 @@ export default async function ProductPage({ params }: Props) {
   )
 
   // Related (same category) + also interested (different categories)
+  // Fetch more than needed so we can prioritize products with working images
   const [{ data: relatedData }, { data: alsoData }] = await Promise.all([
     supabase
       .from('products')
@@ -84,18 +85,31 @@ export default async function ProductPage({ params }: Props) {
       .eq('is_published', true)
       .eq('category', product.category)
       .neq('id', product.id)
-      .limit(4),
+      .limit(20),
     supabase
       .from('products')
       .select('*')
       .eq('is_published', true)
       .neq('category', product.category)
       .neq('id', product.id)
-      .limit(4),
+      .limit(20),
   ])
 
-  const related = (relatedData ?? []) as Product[]
-  const alsoInterested = (alsoData ?? []) as Product[]
+  function hasWorkingImage(p: Product) {
+    return p.images?.length > 0 &&
+      typeof p.images[0] === 'string' &&
+      p.images[0].startsWith('http') &&
+      !p.images[0].includes('/wp/')
+  }
+
+  function prioritizeWithImages(products: Product[], count: number) {
+    const withImg = products.filter(hasWorkingImage)
+    const without = products.filter((p) => !hasWorkingImage(p))
+    return [...withImg, ...without].slice(0, count)
+  }
+
+  const related = prioritizeWithImages((relatedData ?? []) as Product[], 4)
+  const alsoInterested = prioritizeWithImages((alsoData ?? []) as Product[], 4)
 
   const whatsappMsg = encodeURIComponent(
     `Hola, me interesa cotizar: ${product.name} (SKU: ${product.sku})`

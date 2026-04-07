@@ -8,6 +8,7 @@ import ProductCard from './ProductCard'
 
 const PAGE_SIZE = 24
 const SORT_OPTIONS = [
+  { value: 'random', label: 'Aleatorio' },
   { value: 'newest', label: 'Más recientes' },
   { value: 'price-asc', label: 'Precio: menor a mayor' },
   { value: 'price-desc', label: 'Precio: mayor a menor' },
@@ -35,7 +36,7 @@ export default function ProductCatalog({
     category: initialCategory || '',
     priceMin: '',
     priceMax: '',
-    sort: 'newest',
+    sort: 'random',
   })
   const [searchInput, setSearchInput] = useState(filters.search)
   const [products, setProducts] = useState<Product[]>([])
@@ -43,6 +44,7 @@ export default function ProductCatalog({
   const [loadingMore, setLoadingMore] = useState(false)
   const [totalCount, setTotalCount] = useState(0)
   const [hasMore, setHasMore] = useState(false)
+  const [randomPool, setRandomPool] = useState<Product[]>([])
   const [filtersOpen, setFiltersOpen] = useState(false)
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined)
   const supabase = useMemo(() => createClient(), [])
@@ -85,6 +87,8 @@ export default function ProductCatalog({
         query = query.lte('price', parseFloat(filters.priceMax))
       }
 
+      const isRandom = filters.sort === 'random'
+
       switch (filters.sort) {
         case 'price-asc':
           query = query.order('price', { ascending: true })
@@ -102,17 +106,38 @@ export default function ProductCatalog({
           query = query.order('created_at', { ascending: false })
       }
 
-      const { data, count } = await query.range(offset, offset + PAGE_SIZE - 1)
-      const fetched = (data ?? []) as Product[]
-      const total = count ?? 0
-
-      if (append) {
-        setProducts((prev) => [...prev, ...fetched])
+      if (isRandom && !append) {
+        // For random: fetch a large pool and shuffle
+        const { data: allData, count: totalCount } = await query.range(0, 499)
+        const pool = (allData ?? []) as Product[]
+        const total = totalCount ?? 0
+        for (let i = pool.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1))
+          ;[pool[i], pool[j]] = [pool[j], pool[i]]
+        }
+        setProducts(pool.slice(0, PAGE_SIZE))
+        setTotalCount(total)
+        setHasMore(PAGE_SIZE < pool.length)
+        setRandomPool(pool)
+      } else if (isRandom && append) {
+        // Load more from the shuffled pool
+        const nextSlice = randomPool.slice(products.length, products.length + PAGE_SIZE)
+        setProducts((prev) => [...prev, ...nextSlice])
+        setHasMore(products.length + nextSlice.length < randomPool.length)
       } else {
-        setProducts(fetched)
+        const { data, count } = await query.range(offset, offset + PAGE_SIZE - 1)
+        const fetched = (data ?? []) as Product[]
+        const total = count ?? 0
+
+        if (append) {
+          setProducts((prev) => [...prev, ...fetched])
+        } else {
+          setProducts(fetched)
+          setRandomPool([])
+        }
+        setTotalCount(total)
+        setHasMore(offset + fetched.length < total)
       }
-      setTotalCount(total)
-      setHasMore(offset + fetched.length < total)
       setLoading(false)
       setLoadingMore(false)
     },
