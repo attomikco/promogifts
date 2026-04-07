@@ -212,19 +212,17 @@ export default async function HomePage() {
                   className="group flex w-28 shrink-0 flex-col overflow-hidden rounded-xl bg-white shadow-md"
                 >
                   <div
-                    className="flex aspect-[4/3] items-center justify-center p-2"
+                    className="relative flex aspect-[4/3] items-center justify-center"
                     style={{ backgroundColor: color }}
                   >
                     {typeof img === 'string' && img.startsWith('http') ? (
-                      <div className="relative h-full w-full overflow-hidden rounded-lg bg-white">
-                        <Image
-                          src={img}
-                          alt={`${cat.label} - Artículos Promocionales`}
-                          fill
-                          sizes="112px"
-                          className="object-cover"
-                        />
-                      </div>
+                      <Image
+                        src={img}
+                        alt={`${cat.label} - Artículos Promocionales`}
+                        fill
+                        sizes="112px"
+                        className="object-contain"
+                      />
                     ) : (
                       <span className="text-3xl">{cat.emoji}</span>
                     )}
@@ -250,19 +248,17 @@ export default async function HomePage() {
                   className="group flex flex-col overflow-hidden rounded-xl bg-white shadow-md transition hover:-translate-y-1 hover:shadow-xl"
                 >
                   <div
-                    className="flex aspect-square items-center justify-center p-4"
+                    className="relative flex aspect-square items-center justify-center"
                     style={{ backgroundColor: color }}
                   >
                     {typeof img === 'string' && img.startsWith('http') ? (
-                      <div className="relative h-full w-full overflow-hidden rounded-lg bg-white">
-                        <Image
-                          src={img}
-                          alt={`${cat.label} - Artículos Promocionales`}
-                          fill
-                          sizes="20vw"
-                          className="object-cover"
-                        />
-                      </div>
+                      <Image
+                        src={img}
+                        alt={`${cat.label} - Artículos Promocionales`}
+                        fill
+                        sizes="20vw"
+                        className="object-contain"
+                      />
                     ) : (
                       <span className="text-5xl">{cat.emoji}</span>
                     )}
