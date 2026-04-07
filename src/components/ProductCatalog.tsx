@@ -358,7 +358,7 @@ export default function ProductCatalog({
       {/* Products grid */}
       <div className="mx-auto max-w-7xl px-4 pb-16 pt-6 sm:px-6">
         {loading ? (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
             {Array.from({ length: 8 }).map((_, i) => (
               <div key={i} className="animate-pulse overflow-hidden rounded-xl border border-[var(--light)]/60">
                 <div className="aspect-square bg-[var(--pale)]" />
@@ -374,7 +374,7 @@ export default function ProductCatalog({
           </div>
         ) : products.length > 0 ? (
           <>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
               {products.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}

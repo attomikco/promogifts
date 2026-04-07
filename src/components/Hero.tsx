@@ -2,13 +2,13 @@ import Link from 'next/link'
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-[var(--brand)]" style={{ minHeight: 420 }}>
+    <section className="relative overflow-hidden bg-[var(--brand)]" style={{ minHeight: 320 }}>
       {/* Particle network background */}
       <div className="hero-particles pointer-events-none absolute inset-0" />
       <div className="brand-gradient pointer-events-none absolute inset-0" />
 
-      <div className="relative mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 sm:py-28">
-        <h1 className="text-5xl leading-tight text-white sm:text-6xl lg:text-7xl">
+      <div className="relative mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 sm:py-28">
+        <h1 className="text-4xl leading-tight text-white sm:text-6xl lg:text-7xl">
           <span className="font-light">Promogifts</span>
           <br />
           <span className="font-bold">Promocionales</span>

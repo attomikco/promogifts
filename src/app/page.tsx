@@ -197,9 +197,47 @@ export default async function HomePage() {
       <Hero />
 
       {/* Category cards */}
-      <section className="relative z-10 -mt-16 pb-16">
+      <section className="relative z-10 -mt-10 pb-12 sm:-mt-16 sm:pb-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
+          {/* Mobile: horizontal scroll */}
+          <div className="flex gap-3 overflow-x-auto pb-4 sm:hidden">
+            {CATEGORIES.map((cat) => {
+              const color = CATEGORY_COLORS[cat.slug] || '#3D3CB8'
+              const img = categoryImages[cat.slug]
+
+              return (
+                <Link
+                  key={cat.slug}
+                  href={`/productos?cat=${cat.slug}`}
+                  className="group flex w-28 shrink-0 flex-col overflow-hidden rounded-xl bg-white shadow-md"
+                >
+                  <div
+                    className="flex aspect-[4/3] items-center justify-center p-2"
+                    style={{ backgroundColor: color }}
+                  >
+                    {typeof img === 'string' && img.startsWith('http') ? (
+                      <div className="relative h-full w-full overflow-hidden rounded-lg bg-white">
+                        <Image
+                          src={img}
+                          alt={`${cat.label} - Artículos Promocionales`}
+                          fill
+                          sizes="112px"
+                          className="object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <span className="text-3xl">{cat.emoji}</span>
+                    )}
+                  </div>
+                  <div className="p-2 text-center">
+                    <h3 className="text-xs font-semibold text-[var(--black)]">{cat.label}</h3>
+                  </div>
+                </Link>
+              )
+            })}
+          </div>
+          {/* Tablet/Desktop: grid */}
+          <div className="hidden gap-4 sm:grid sm:grid-cols-3 md:grid-cols-5">
             {CATEGORIES.map((cat) => {
               const color = CATEGORY_COLORS[cat.slug] || '#3D3CB8'
               const minPrice = priceMap[cat.slug]
@@ -221,7 +259,7 @@ export default async function HomePage() {
                           src={img}
                           alt={`${cat.label} - Artículos Promocionales`}
                           fill
-                          sizes="(max-width: 640px) 50vw, 20vw"
+                          sizes="20vw"
                           className="object-cover"
                         />
                       </div>
