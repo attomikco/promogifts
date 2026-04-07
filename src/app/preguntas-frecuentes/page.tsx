@@ -120,7 +120,7 @@ export default function FAQPage() {
               <Link href="/contacto" className="rounded-full bg-[var(--brand)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[var(--brand-dark)]">
                 Contáctanos
               </Link>
-              <a href="https://wa.me/521XXXXXXXXXX" target="_blank" rel="noopener noreferrer" className="rounded-full border border-[var(--brand)] px-6 py-3 text-sm font-semibold text-[var(--brand)] transition hover:bg-[var(--brand-pale)]">
+              <a href="https://wa.me/525530297582?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n" target="_blank" rel="noopener noreferrer" className="rounded-full border border-[var(--brand)] px-6 py-3 text-sm font-semibold text-[var(--brand)] transition hover:bg-[var(--brand-pale)]">
                 WhatsApp
               </a>
             </div>
