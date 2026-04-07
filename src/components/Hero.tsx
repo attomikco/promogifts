@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function Hero() {
   return (
     <section className="relative overflow-hidden bg-[var(--brand)]" style={{ minHeight: 420 }}>
@@ -12,8 +14,22 @@ export default function Hero() {
           <span className="font-bold">Promocionales</span>
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-lg text-white/80 sm:text-xl">
-          Artículos Promocionales y Regalos para Empresas en México
+          Artículos Promocionales y Regalos Corporativos para Empresas en México
         </p>
+        <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <Link
+            href="/productos"
+            className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-[var(--brand)] transition hover:bg-white/90"
+          >
+            Ver Catálogo
+          </Link>
+          <Link
+            href="/contacto"
+            className="rounded-full border border-white/30 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+          >
+            Solicitar Cotización
+          </Link>
+        </div>
       </div>
     </section>
   )

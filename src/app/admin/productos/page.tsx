@@ -4,6 +4,7 @@ import { supabaseAdmin } from '@/lib/supabase/admin'
 import { CATEGORIES, type Product } from '@/lib/types'
 import SearchInput from '@/components/admin/SearchInput'
 import BulkPublishButton from '@/components/admin/BulkPublishButton'
+import BulkEnrichButton from '@/components/admin/BulkEnrichButton'
 
 const PER_PAGE = 50
 
@@ -57,6 +58,13 @@ export default async function AdminProductosPage({
     .select('*', { count: 'exact', head: true })
     .eq('is_published', false)
 
+  // Unenriched count for bulk enrich
+  const { count: unenrichedCount } = await supabaseAdmin
+    .from('products')
+    .select('*', { count: 'exact', head: true })
+    .eq('is_published', true)
+    .is('ai_enriched_at', null)
+
   const showingFrom = totalCount === 0 ? 0 : from + 1
   const showingTo = Math.min(from + PER_PAGE, totalCount)
   const pageNumbers = getPageNumbers(currentPage, totalPages)
@@ -85,9 +93,12 @@ export default async function AdminProductosPage({
         </div>
       </div>
 
-      {/* Search */}
-      <div className="mb-4 max-w-sm">
-        <SearchInput />
+      {/* AI Enrich + Search */}
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+        <div className="max-w-sm flex-1">
+          <SearchInput />
+        </div>
+        <BulkEnrichButton pendingCount={unenrichedCount ?? 0} />
       </div>
 
       {/* Table */}

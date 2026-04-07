@@ -1,12 +1,20 @@
 import type { Metadata } from 'next'
-import { Poppins } from 'next/font/google'
+import { Poppins, Libre_Baskerville } from 'next/font/google'
 import './globals.css'
 
 const poppins = Poppins({
   subsets: ['latin'],
   variable: '--font-body',
   display: 'swap',
-  weight: ['300', '400', '500', '600', '700', '800'],
+  weight: ['300', '400', '500', '600', '700'],
+})
+
+const libreBaskerville = Libre_Baskerville({
+  subsets: ['latin'],
+  variable: '--font-serif',
+  display: 'swap',
+  weight: ['400', '700'],
+  style: ['normal', 'italic'],
 })
 
 export const metadata: Metadata = {
@@ -18,10 +26,26 @@ export const metadata: Metadata = {
   description:
     'Más de 1,000 artículos promocionales con personalización de logo. Termos, bolsas, plumas, tecnología y más. Envíos a toda la República Mexicana.',
   metadataBase: new URL('https://promogifts.com.mx'),
+  icons: {
+    icon: '/icon.png',
+    apple: '/apple-touch-icon.png',
+  },
   openGraph: {
     locale: 'es_MX',
     type: 'website',
     siteName: 'Promogifts México',
+    images: [
+      {
+        url: '/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Promogifts - Artículos Promocionales y Regalos Corporativos en México',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: ['/og-image.jpg'],
   },
   robots: {
     index: true,
@@ -45,8 +69,18 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="es" className={poppins.variable}>
+    <html lang="es" className={`${poppins.variable} ${libreBaskerville.variable}`}>
       <head>
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`} />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${process.env.NEXT_PUBLIC_GA_ID}');`,
+              }}
+            />
+          </>
+        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

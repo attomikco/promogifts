@@ -24,7 +24,7 @@ export default function NosotrosPage() {
     '@type': 'LocalBusiness',
     name: 'Promogifts',
     url: 'https://promogifts.com.mx',
-    email: 'hola@promogifts.com.mx',
+    email: 'ventas@promogifts.com.mx',
     description: 'Artículos promocionales y regalos corporativos en México',
     address: {
       '@type': 'PostalAddress',

@@ -17,7 +17,7 @@ export default function ContactoPage() {
     '@type': 'LocalBusiness',
     name: 'Promogifts',
     url: 'https://promogifts.com.mx',
-    email: 'hola@promogifts.com.mx',
+    email: 'ventas@promogifts.com.mx',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Ciudad de México',
@@ -50,14 +50,23 @@ export default function ContactoPage() {
               <div className="mt-8 space-y-6">
                 <div>
                   <h3 className="text-sm font-semibold text-[var(--black)]">Email</h3>
-                  <a href="mailto:hola@promogifts.com.mx" className="mt-1 block text-sm text-[var(--brand)]">
-                    hola@promogifts.com.mx
+                  <a href="mailto:ventas@promogifts.com.mx" className="mt-1 block text-sm text-[var(--brand)]">
+                    ventas@promogifts.com.mx
+                  </a>
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-[var(--black)]">Teléfono</h3>
+                  <a href="tel:+525556821145" className="mt-1 block text-sm text-[var(--brand)]">
+                    (+52 55) 5682 1145
+                  </a>
+                  <a href="tel:+525530297582" className="mt-1 block text-sm text-[var(--brand)]">
+                    (+52 55) 3029 7582
                   </a>
                 </div>
                 <div>
                   <h3 className="text-sm font-semibold text-[var(--black)]">WhatsApp</h3>
                   <a
-                    href="https://wa.me/521XXXXXXXXXX?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n"
+                    href="https://wa.me/525530297582?text=Hola%2C%20quiero%20una%20cotizaci%C3%B3n"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="mt-1 block text-sm text-[var(--brand)]"

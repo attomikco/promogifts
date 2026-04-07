@@ -14,8 +14,18 @@ import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 
+const ADMIN_EMAIL = 'admin@promogifts.com.mx'
+
 function getResend() {
   return new Resend(process.env.RESEND_API_KEY)
+}
+
+function escapeHtml(str: string) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
 }
 
 export async function POST(request: Request) {
@@ -40,24 +50,62 @@ export async function POST(request: Request) {
       message,
     })
 
+    // Build email
+    const isProductQuote = !!productName
+    const subject = isProductQuote
+      ? `Nueva cotización: ${productName} (${productSku || 'N/A'})`
+      : `Nuevo mensaje de contacto de ${name || 'un visitante'}`
+
+    const rows = [
+      { label: 'Nombre', value: name },
+      { label: 'Empresa', value: company },
+      { label: 'Email', value: email },
+      { label: 'Teléfono', value: phone },
+      ...(isProductQuote
+        ? [
+            { label: 'Producto', value: `${productName} (${productSku || '-'})` },
+            { label: 'Cantidad', value: quantity },
+          ]
+        : []),
+      { label: 'Mensaje', value: message },
+    ]
+
+    const tableRows = rows
+      .map(
+        (r) => `
+        <tr>
+          <td style="padding:10px 12px;border-bottom:1px solid #DDDDF0;font-weight:600;color:#1A1A2E;width:120px;vertical-align:top">${r.label}</td>
+          <td style="padding:10px 12px;border-bottom:1px solid #DDDDF0;color:#6B6B8A">${escapeHtml(String(r.value || '-'))}</td>
+        </tr>`
+      )
+      .join('')
+
+    const html = `
+      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto">
+        <div style="background:#3D3CB8;padding:24px 32px;border-radius:12px 12px 0 0">
+          <h1 style="margin:0;color:#fff;font-size:20px">
+            ${isProductQuote ? 'Nueva Solicitud de Cotización' : 'Nuevo Mensaje de Contacto'}
+          </h1>
+        </div>
+        <div style="border:1px solid #DDDDF0;border-top:0;border-radius:0 0 12px 12px;padding:24px 0">
+          <table style="border-collapse:collapse;width:100%">
+            ${tableRows}
+          </table>
+        </div>
+        <p style="margin-top:16px;font-size:12px;color:#6B6B8A;text-align:center">
+          Este mensaje fue enviado desde el formulario de promogifts.com.mx
+        </p>
+      </div>
+    `
+
     // Send email via Resend
     const resend = getResend()
     await resend.emails.send({
-      from: 'Promogifts <onboarding@resend.dev>',
-      to: 'ventas@promogifts.com.mx',
-      subject: `Nueva cotización: ${productName || 'General'} (${productSku || 'N/A'})`,
-      html: `
-        <h2>Nueva solicitud de cotización</h2>
-        <table style="border-collapse:collapse;width:100%;max-width:500px">
-          <tr><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold">Nombre</td><td style="padding:8px;border-bottom:1px solid #eee">${name || '-'}</td></tr>
-          <tr><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold">Empresa</td><td style="padding:8px;border-bottom:1px solid #eee">${company || '-'}</td></tr>
-          <tr><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold">Email</td><td style="padding:8px;border-bottom:1px solid #eee">${email}</td></tr>
-          <tr><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold">Teléfono</td><td style="padding:8px;border-bottom:1px solid #eee">${phone || '-'}</td></tr>
-          <tr><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold">Producto</td><td style="padding:8px;border-bottom:1px solid #eee">${productName || '-'} (${productSku || '-'})</td></tr>
-          <tr><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold">Cantidad</td><td style="padding:8px;border-bottom:1px solid #eee">${quantity || '-'}</td></tr>
-          <tr><td style="padding:8px;border-bottom:1px solid #eee;font-weight:bold">Mensaje</td><td style="padding:8px;border-bottom:1px solid #eee">${message || '-'}</td></tr>
-        </table>
-      `,
+      from: process.env.RESEND_FROM_EMAIL || 'Promogifts <onboarding@resend.dev>',
+      to: ADMIN_EMAIL,
+      replyTo: email,
+      subject,
+      html,
     })
 
     return NextResponse.json({ success: true })
