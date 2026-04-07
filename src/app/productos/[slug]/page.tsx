@@ -102,14 +102,8 @@ export default async function ProductPage({ params }: Props) {
       !p.images[0].includes('/wp/')
   }
 
-  function prioritizeWithImages(products: Product[], count: number) {
-    const withImg = products.filter(hasWorkingImage)
-    const without = products.filter((p) => !hasWorkingImage(p))
-    return [...withImg, ...without].slice(0, count)
-  }
-
-  const related = prioritizeWithImages((relatedData ?? []) as Product[], 4)
-  const alsoInterested = prioritizeWithImages((alsoData ?? []) as Product[], 4)
+  const related = ((relatedData ?? []) as Product[]).filter(hasWorkingImage).slice(0, 4)
+  const alsoInterested = ((alsoData ?? []) as Product[]).filter(hasWorkingImage).slice(0, 4)
 
   const whatsappMsg = encodeURIComponent(
     `Hola, me interesa cotizar: ${product.name} (SKU: ${product.sku})`
