@@ -288,7 +288,7 @@ export default async function ProductPage({ params }: Props) {
                   Cotizar por WhatsApp
                 </a>
                 <a
-                  href={`mailto:ventas@promogifts.com.mx?subject=Cotización: ${product.name} (${product.sku})`}
+                  href={`mailto:info@promogifts.com.mx?subject=Cotización: ${product.name} (${product.sku})`}
                   className="rounded-full border border-[var(--brand)] px-6 py-3 text-sm font-semibold text-[var(--brand)] transition hover:bg-[var(--brand-pale)]"
                 >
                   Cotizar por correo

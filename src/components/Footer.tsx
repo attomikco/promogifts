@@ -55,8 +55,8 @@ export default function Footer() {
               </a>
             </li>
             <li>
-              <a href="mailto:ventas@promogifts.com.mx" className="transition hover:text-white">
-                ventas@promogifts.com.mx
+              <a href="mailto:info@promogifts.com.mx" className="transition hover:text-white">
+                info@promogifts.com.mx
               </a>
             </li>
           </ul>

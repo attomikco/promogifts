@@ -57,7 +57,7 @@ export default function LoginForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="mt-1 w-full rounded-lg border border-[var(--light)] px-3 py-2 text-sm outline-none transition focus:border-[var(--brand)] focus:ring-1 focus:ring-[var(--brand)]"
-          placeholder="admin@promogifts.com.mx"
+          placeholder="info@promogifts.com.mx"
         />
       </div>
 

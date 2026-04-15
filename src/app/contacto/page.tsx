@@ -17,7 +17,7 @@ export default function ContactoPage() {
     '@type': 'LocalBusiness',
     name: 'Promogifts',
     url: 'https://promogifts.com.mx',
-    email: 'ventas@promogifts.com.mx',
+    email: 'info@promogifts.com.mx',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Ciudad de México',
@@ -50,8 +50,8 @@ export default function ContactoPage() {
               <div className="mt-8 space-y-6">
                 <div>
                   <h3 className="text-sm font-semibold text-[var(--black)]">Email</h3>
-                  <a href="mailto:ventas@promogifts.com.mx" className="mt-1 block text-sm text-[var(--brand)]">
-                    ventas@promogifts.com.mx
+                  <a href="mailto:info@promogifts.com.mx" className="mt-1 block text-sm text-[var(--brand)]">
+                    info@promogifts.com.mx
                   </a>
                 </div>
                 <div>
