@@ -31,8 +31,7 @@ export default function RandomProducts({
         (p) =>
           p.images?.length > 0 &&
           typeof p.images[0] === 'string' &&
-          p.images[0].startsWith('http') &&
-          !p.images[0].includes('/wp/')
+          p.images[0].startsWith('http')
       )
       // Shuffle
       for (let i = withImages.length - 1; i > 0; i--) {

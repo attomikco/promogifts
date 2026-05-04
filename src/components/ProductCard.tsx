@@ -12,8 +12,7 @@ export default function ProductCard({
   const hasImage =
     product.images?.length > 0 &&
     typeof product.images[0] === 'string' &&
-    product.images[0].startsWith('http') &&
-    !product.images[0].includes('/wp/')
+    product.images[0].startsWith('http')
   const altText = `${product.name} - Artículo Promocional Personalizado`
 
   return (

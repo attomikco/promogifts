@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!data) return {}
   const product = data as Product
-  const hasImg = product.images?.[0]?.startsWith('http') && !product.images[0].includes('/wp/')
+  const hasImg = product.images?.[0]?.startsWith('http')
   const img = hasImg ? product.images[0] : undefined
 
   return {
@@ -68,12 +68,11 @@ export default async function ProductPage({ params }: Props) {
   if (!data) notFound()
   const product = data as Product
   const categoryInfo = CATEGORIES.find((c) => c.slug === product.category)
-  const hasImage = product.images?.[0]?.startsWith('http') && !product.images[0].includes('/wp/')
+  const hasImage = product.images?.[0]?.startsWith('http')
   const altText = `${product.name} - Artículo Promocional Personalizado`
 
-  // All valid images (skip /wp/)
   const validImages = (product.images ?? []).filter(
-    (img: string) => typeof img === 'string' && img.startsWith('http') && !img.includes('/wp/')
+    (img: string) => typeof img === 'string' && img.startsWith('http')
   )
 
   // Related (same category) + also interested (different categories)
@@ -98,8 +97,7 @@ export default async function ProductPage({ params }: Props) {
   function hasWorkingImage(p: Product) {
     return p.images?.length > 0 &&
       typeof p.images[0] === 'string' &&
-      p.images[0].startsWith('http') &&
-      !p.images[0].includes('/wp/')
+      p.images[0].startsWith('http')
   }
 
   const related = ((relatedData ?? []) as Product[]).filter(hasWorkingImage).slice(0, 4)

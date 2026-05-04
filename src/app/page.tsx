@@ -55,8 +55,7 @@ export default async function HomePage() {
   function hasWorkingImage(p: Product) {
     return p.images?.length > 0 &&
       typeof p.images[0] === 'string' &&
-      p.images[0].startsWith('http') &&
-      !p.images[0].includes('/wp/')
+      p.images[0].startsWith('http')
   }
 
   // Shuffle and pick random subsets, preferring products with images
@@ -104,7 +103,7 @@ export default async function HomePage() {
   if (sampleProducts) {
     for (const p of sampleProducts) {
       const img = p.images?.[0]
-      if (!categoryImages[p.category] && typeof img === 'string' && img.startsWith('http') && !img.includes('/wp/')) {
+      if (!categoryImages[p.category] && typeof img === 'string' && img.startsWith('http')) {
         categoryImages[p.category] = img
       }
     }
@@ -124,7 +123,7 @@ export default async function HomePage() {
     if (fallbackProducts) {
       for (const p of fallbackProducts) {
         const img = p.images?.[0]
-        if (!categoryImages[p.category] && typeof img === 'string' && img.startsWith('http') && !img.includes('/wp/')) {
+        if (!categoryImages[p.category] && typeof img === 'string' && img.startsWith('http')) {
           categoryImages[p.category] = img
         }
       }
