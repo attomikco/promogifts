@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# diagnostic / recovery artifacts
+broken-images-report.json
+recover-wp-images-failures.json
+scripts/wp-legacy-index.json
