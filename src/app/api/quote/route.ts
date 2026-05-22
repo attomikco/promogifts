@@ -14,7 +14,7 @@ import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 
-const ADMIN_EMAIL = 'info@promogifts.com.mx'
+const ADMIN_EMAILS = ['info@promogifts.com.mx', 'pablo@attomik.co']
 
 function getResend() {
   return new Resend(process.env.RESEND_API_KEY)
@@ -99,15 +99,32 @@ export async function POST(request: Request) {
     `
 
     // Send email via Resend
+    if (!process.env.RESEND_API_KEY) {
+      console.error('Quote: RESEND_API_KEY is not set')
+      return NextResponse.json(
+        { error: 'Email service not configured' },
+        { status: 500 }
+      )
+    }
+
     const resend = getResend()
-    await resend.emails.send({
+    const { data, error } = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL || 'Promogifts <info@promogifts.com.mx>',
-      to: ADMIN_EMAIL,
+      to: ADMIN_EMAILS,
       replyTo: email,
       subject,
       html,
     })
 
+    if (error) {
+      console.error('Quote: Resend send failed:', error)
+      return NextResponse.json(
+        { error: `Resend: ${error.message || 'unknown error'}` },
+        { status: 500 }
+      )
+    }
+
+    console.log('Quote: Resend send ok, id=', data?.id)
     return NextResponse.json({ success: true })
   } catch (err) {
     console.error('Quote error:', err)
