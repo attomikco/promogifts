@@ -10,6 +10,8 @@ export type Product = {
   material?: string
   colors: string[]
   images: string[]
+  description?: string
+  extra?: string
   ai_description?: string
   ai_short_desc?: string
   ai_meta_title?: string

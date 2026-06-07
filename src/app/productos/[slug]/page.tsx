@@ -12,6 +12,14 @@ import { CATEGORIES, type Product } from '@/lib/types'
 
 type Props = { params: Promise<{ slug: string }> }
 
+function resolveDescription(p: Product): string | null {
+  const ai = p.ai_description?.trim()
+  if (ai) return ai
+  const original = p.description?.trim()
+  if (original) return original
+  return null
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const supabase = await createClient()
@@ -26,18 +34,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = data as Product
   const hasImg = product.images?.[0]?.startsWith('http')
   const img = hasImg ? product.images[0] : undefined
+  const resolved = resolveDescription(product)
+  const metaDescription =
+    product.ai_meta_desc ||
+    resolved ||
+    `Compra ${product.name} personalizado con tu logo. Desde ${product.min_qty} piezas. Entrega en toda la República Mexicana. Cotiza gratis.`
+  const socialDescription =
+    product.ai_meta_desc ?? resolved ?? product.ai_short_desc ?? undefined
 
   return {
     title:
       product.ai_meta_title ||
       `${product.name} | Artículos Promocionales | Promogifts México`,
-    description:
-      product.ai_meta_desc ||
-      `Compra ${product.name} personalizado con tu logo. Desde ${product.min_qty} piezas. Entrega en toda la República Mexicana. Cotiza gratis.`,
+    description: metaDescription,
     keywords: product.ai_keywords?.join(', '),
     openGraph: {
       title: product.ai_meta_title ?? product.name,
-      description: product.ai_meta_desc ?? product.ai_short_desc ?? undefined,
+      description: socialDescription,
       url: `https://promogifts.com.mx/productos/${product.slug}`,
       type: 'website',
       ...(img ? { images: [{ url: img, width: 800, height: 800, alt: product.name }] } : {}),
@@ -45,7 +58,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     twitter: {
       card: 'summary_large_image',
       title: product.ai_meta_title ?? product.name,
-      description: product.ai_meta_desc ?? product.ai_short_desc ?? undefined,
+      description: socialDescription,
       ...(img ? { images: [img] } : {}),
     },
     alternates: {
@@ -116,11 +129,13 @@ export default async function ProductPage({ params }: Props) {
     { label: product.name },
   ]
 
+  const resolvedDescription = resolveDescription(product)
+
   const productJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.name,
-    description: product.ai_description ?? product.ai_short_desc ?? `${product.name} - Artículo promocional personalizado con tu logo`,
+    description: resolvedDescription ?? product.ai_short_desc ?? `${product.name} - Artículo promocional personalizado con tu logo`,
     sku: product.sku,
     ...(hasImage ? { image: product.images[0] } : {}),
     brand: { '@type': 'Brand', name: 'Promogifts' },
@@ -324,9 +339,9 @@ export default async function ProductPage({ params }: Props) {
               {/* Description */}
               <div className="lg:col-span-2">
                 <h2 className="text-2xl font-bold text-[var(--black)]">Descripción del Producto</h2>
-                {product.ai_description ? (
+                {resolvedDescription ? (
                   <div className="mt-4 leading-relaxed text-[var(--mid)]">
-                    {product.ai_description}
+                    {resolvedDescription}
                   </div>
                 ) : (
                   <div className="mt-4 space-y-4 leading-relaxed text-[var(--mid)]">
