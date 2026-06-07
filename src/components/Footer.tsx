@@ -88,7 +88,17 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs sm:flex-row sm:px-6">
           <p>&copy; {new Date().getFullYear()} Promogifts, SA de CV. Todos los derechos reservados.</p>
-          <p>Sitio diseñado por Attomik</p>
+          <p>
+            Sitio diseñado por{' '}
+            <a
+              href="https://attomik.co"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition hover:text-white"
+            >
+              Attomik
+            </a>
+          </p>
         </div>
       </div>
     </footer>
