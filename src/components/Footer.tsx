@@ -11,7 +11,7 @@ export default function Footer() {
         {/* Col 1 — Logo */}
         <div>
           <Link href="/">
-            <Image src="/logo.jpg" alt="Promo & gifts" width={80} height={60} style={{ width: 80, height: 'auto' }} />
+            <Image src="/logo-white.png" alt="Promo & gifts" width={80} height={62} style={{ width: 80, height: 'auto' }} />
           </Link>
           <p className="mt-4 text-sm leading-relaxed">
             Artículos promocionales y regalos corporativos con
