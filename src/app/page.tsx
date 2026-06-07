@@ -87,47 +87,45 @@ export default async function HomePage() {
     }
   }
 
+  const CATEGORY_FALLBACK_IMAGE = '/category-placeholder.svg'
   const categoryImages: Record<string, string> = {}
-  const catSlugs = CATEGORIES.map((c) => c.slug)
 
-  // First try published products for category images
-  const { data: sampleProducts } = await supabase
-    .from('products')
-    .select('category, images')
-    .eq('is_published', true)
-    .in('category', catSlugs)
-    .not('images', 'eq', '{}')
-    .order('created_at', { ascending: false })
-    .limit(200)
+  // Pick one product image per category. A single global limit (the previous
+  // approach) misses categories whose newest product falls outside the window
+  // — decoracion's top product ranks ~2,250th by created_at.
+  const perCategoryResults = await Promise.all(
+    CATEGORIES.map((cat) =>
+      supabase
+        .from('products')
+        .select('images')
+        .eq('category', cat.slug)
+        .eq('is_published', true)
+        .order('created_at', { ascending: false })
+        .limit(20)
+        .then(({ data }) => ({ slug: cat.slug, data: data ?? [] }))
+    )
+  )
 
-  if (sampleProducts) {
-    for (const p of sampleProducts) {
-      const img = p.images?.[0]
-      if (!categoryImages[p.category] && typeof img === 'string' && img.startsWith('http')) {
-        categoryImages[p.category] = img
-      }
+  const emptyCategories: string[] = []
+  for (const { slug, data } of perCategoryResults) {
+    const hit = data.find(
+      (p) =>
+        Array.isArray(p.images) &&
+        typeof p.images[0] === 'string' &&
+        p.images[0].startsWith('http')
+    )
+    if (hit) {
+      categoryImages[slug] = hit.images[0]
+    } else {
+      categoryImages[slug] = CATEGORY_FALLBACK_IMAGE
+      emptyCategories.push(slug)
     }
   }
 
-  // For categories still missing an image, try unpublished products
-  const missingCats = catSlugs.filter((s) => !categoryImages[s])
-  if (missingCats.length > 0) {
-    const { data: fallbackProducts } = await supabase
-      .from('products')
-      .select('category, images')
-      .in('category', missingCats)
-      .not('images', 'eq', '{}')
-      .order('created_at', { ascending: false })
-      .limit(50)
-
-    if (fallbackProducts) {
-      for (const p of fallbackProducts) {
-        const img = p.images?.[0]
-        if (!categoryImages[p.category] && typeof img === 'string' && img.startsWith('http')) {
-          categoryImages[p.category] = img
-        }
-      }
-    }
+  if (emptyCategories.length > 0) {
+    console.warn(
+      `[homepage] category grid: no product image for ${emptyCategories.join(', ')} — using static fallback`
+    )
   }
 
   // JSON-LD for homepage
@@ -214,7 +212,7 @@ export default async function HomePage() {
                     className="relative flex aspect-[4/3] items-center justify-center"
                     style={{ backgroundColor: color }}
                   >
-                    {typeof img === 'string' && img.startsWith('http') ? (
+                    {typeof img === 'string' && img.length > 0 ? (
                       <Image
                         src={img}
                         alt={`${cat.label} - Artículos Promocionales`}
@@ -250,7 +248,7 @@ export default async function HomePage() {
                     className="relative flex aspect-square items-center justify-center"
                     style={{ backgroundColor: color }}
                   >
-                    {typeof img === 'string' && img.startsWith('http') ? (
+                    {typeof img === 'string' && img.length > 0 ? (
                       <Image
                         src={img}
                         alt={`${cat.label} - Artículos Promocionales`}
