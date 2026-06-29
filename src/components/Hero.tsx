@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import WhatsAppButton from '@/components/WhatsAppButton'
 
 export default function Hero() {
   return (
@@ -17,17 +18,16 @@ export default function Hero() {
           Artículos Promocionales y Regalos Corporativos para Empresas en México
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-4">
+          <WhatsAppButton
+            message="Hola, quiero una cotización de artículos promocionales"
+            label="Cotizar por WhatsApp"
+            className="rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:opacity-90"
+          />
           <Link
             href="/productos"
             className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-[var(--brand)] transition hover:bg-white/90"
           >
             Ver Catálogo
-          </Link>
-          <Link
-            href="/contacto"
-            className="rounded-full border border-white/30 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
-          >
-            Solicitar Cotización
           </Link>
         </div>
       </div>

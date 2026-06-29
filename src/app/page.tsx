@@ -4,7 +4,7 @@ import Nav from '@/components/Nav'
 import Hero from '@/components/Hero'
 import ProductCard from '@/components/ProductCard'
 import RandomProducts from '@/components/RandomProducts'
-import ContactForm from '@/components/ContactForm'
+import WhatsAppButton from '@/components/WhatsAppButton'
 import Footer from '@/components/Footer'
 import { createClient } from '@/lib/supabase/server'
 import { CATEGORIES, type Product } from '@/lib/types'
@@ -441,6 +441,13 @@ export default async function HomePage() {
               </div>
             ))}
           </div>
+          <div className="mt-12 text-center">
+            <WhatsAppButton
+              message="Hola, quiero cotizar regalos corporativos para mi empresa"
+              label="Cotiza por WhatsApp"
+              className="rounded-full bg-white px-8 py-3 text-sm font-semibold text-[var(--brand)] shadow-lg transition hover:bg-white/90"
+            />
+          </div>
         </div>
       </section>
 
@@ -610,8 +617,24 @@ export default async function HomePage() {
               </div>
             </div>
             <div className="lg:col-span-3">
-              <div className="rounded-xl border border-[var(--light)]/60 bg-white p-6 sm:p-8">
-                <ContactForm />
+              <div className="rounded-xl border border-[var(--light)]/60 bg-white p-6 text-center sm:p-8">
+                <h3 className="text-xl font-bold text-[var(--black)]">
+                  Cotiza en segundos por WhatsApp
+                </h3>
+                <p className="mx-auto mt-3 max-w-md text-sm text-[var(--mid)]">
+                  Sin formularios. Escríbenos y te respondemos con tu cotización en menos de 24 horas.
+                </p>
+                <WhatsAppButton
+                  message="Hola, quiero una cotización de artículos promocionales"
+                  label="Iniciar conversación"
+                  className="mt-6 rounded-full bg-[#25D366] px-8 py-3 text-sm font-semibold text-white shadow-lg transition hover:opacity-90"
+                />
+                <p className="mt-4 text-xs text-[var(--mid)]">
+                  ¿Prefieres correo?{' '}
+                  <Link href="/contacto" className="font-semibold text-[var(--brand)] hover:underline">
+                    Usa nuestro formulario
+                  </Link>
+                </p>
               </div>
             </div>
           </div>

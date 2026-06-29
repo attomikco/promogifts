@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Nav from '@/components/Nav'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import ContactForm from '@/components/ContactForm'
+import WhatsAppButton from '@/components/WhatsAppButton'
 import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
@@ -39,6 +40,20 @@ export default function ContactoPage() {
 
       <main className="flex-1">
         <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
+          <div className="mb-12 flex flex-col items-center gap-5 rounded-2xl bg-[var(--brand)] px-6 py-10 text-center sm:flex-row sm:justify-between sm:text-left">
+            <div>
+              <h2 className="text-2xl font-bold text-white">La forma más rápida: WhatsApp</h2>
+              <p className="mt-2 text-white/80">
+                Inicia la conversación al instante y recibe tu cotización en menos de 24 horas.
+              </p>
+            </div>
+            <WhatsAppButton
+              message="Hola, quiero una cotización de artículos promocionales"
+              label="Iniciar conversación"
+              className="shrink-0 rounded-full bg-[#25D366] px-8 py-3 text-sm font-semibold text-white shadow-lg transition hover:opacity-90"
+            />
+          </div>
+
           <div className="grid gap-12 lg:grid-cols-5">
             {/* Left — info */}
             <div className="lg:col-span-2">
@@ -93,9 +108,12 @@ export default function ContactoPage() {
             {/* Right — form */}
             <div className="lg:col-span-3">
               <div className="rounded-xl border border-[var(--light)]/60 bg-white p-6 sm:p-8">
-                <h2 className="mb-6 text-xl font-bold text-[var(--black)]">
-                  Envíanos un mensaje
+                <h2 className="mb-1 text-xl font-bold text-[var(--black)]">
+                  ¿Prefieres correo? Envíanos un mensaje
                 </h2>
+                <p className="mb-6 text-sm text-[var(--mid)]">
+                  Completa el formulario y te responderemos por correo.
+                </p>
                 <ContactForm />
               </div>
             </div>
