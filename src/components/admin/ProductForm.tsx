@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { CATEGORIES, type Product } from '@/lib/types'
+import ImageManager from './ImageManager'
 
 function slugify(name: string, sku: string): string {
   const base = name
@@ -33,6 +34,7 @@ export default function ProductForm({ product }: { product?: Product }) {
   const [colors, setColors] = useState(product?.colors?.join(', ') ?? '')
   const [isPublished, setIsPublished] = useState(product?.is_published ?? false)
   const [isFeatured, setIsFeatured] = useState(product?.is_featured ?? false)
+  const [images, setImages] = useState<string[]>(product?.images ?? [])
 
   // AI fields
   const [shortDesc, setShortDesc] = useState(product?.ai_short_desc ?? '')
@@ -118,7 +120,7 @@ export default function ProductForm({ product }: { product?: Product }) {
         .split(',')
         .map((c) => c.trim())
         .filter(Boolean),
-      images: product?.images ?? [],
+      images,
       is_published: isPublished,
       is_featured: isFeatured,
       ai_short_desc: shortDesc || null,
@@ -293,6 +295,20 @@ export default function ProductForm({ product }: { product?: Product }) {
           </div>
         </div>
       </div>
+
+      {/* Images */}
+      {isEditing ? (
+        <ImageManager productId={product.id} images={images} onChange={setImages} />
+      ) : (
+        <div className="rounded-xl border border-[var(--light)]/60 bg-white p-6">
+          <h2 className="mb-1 text-sm font-semibold uppercase tracking-wider text-[var(--mid)]">
+            Imágenes
+          </h2>
+          <p className="text-sm text-[var(--mid)]">
+            Guarda el producto primero para poder subir imágenes.
+          </p>
+        </div>
+      )}
 
       {/* AI fields */}
       <div className="rounded-xl border-2 border-[var(--brand)]/20 bg-white p-6">

@@ -29,10 +29,17 @@ export async function proxy(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
+  const { pathname } = request.nextUrl
+
+  // Protect the admin write APIs (service-role) with a JSON 401.
+  if (!user && pathname.startsWith('/api/admin')) {
+    return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
+  }
+
   // Protect /admin routes (except login)
   if (
-    request.nextUrl.pathname.startsWith('/admin') &&
-    !request.nextUrl.pathname.includes('login')
+    pathname.startsWith('/admin') &&
+    !pathname.includes('login')
   ) {
     if (!user) {
       const url = request.nextUrl.clone()
@@ -45,5 +52,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: ['/admin/:path*', '/api/admin/:path*'],
 }
