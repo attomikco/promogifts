@@ -34,6 +34,12 @@ export default async function AdminLayout({
           >
             + Agregar producto
           </Link>
+          <Link
+            href="/admin/leads"
+            className="rounded-lg px-3 py-2 text-sm font-medium text-white/70 transition hover:bg-white/10 hover:text-white"
+          >
+            Leads
+          </Link>
         </nav>
 
         <div className="border-t border-white/10 pt-4">

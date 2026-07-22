@@ -205,7 +205,7 @@ export default async function HomePage() {
               return (
                 <Link
                   key={cat.slug}
-                  href={`/productos?cat=${cat.slug}`}
+                  href={`/categoria/`}
                   className="group flex w-28 shrink-0 flex-col overflow-hidden rounded-xl bg-white shadow-md"
                 >
                   <div
@@ -241,7 +241,7 @@ export default async function HomePage() {
               return (
                 <Link
                   key={cat.slug}
-                  href={`/productos?cat=${cat.slug}`}
+                  href={`/categoria/`}
                   className="group flex flex-col overflow-hidden rounded-xl bg-white shadow-md transition hover:-translate-y-1 hover:shadow-xl"
                 >
                   <div

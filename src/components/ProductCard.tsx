@@ -1,12 +1,20 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Product } from '@/lib/types'
+import AddToQuoteButton from '@/components/AddToQuoteButton'
+
+// ProductCard accepts either a full Product or the trimmed card shape used by
+// the SEO category pages (only card columns are fetched there).
+export type CardProduct = Pick<
+  Product,
+  'id' | 'sku' | 'name' | 'slug' | 'price' | 'min_qty' | 'images'
+>
 
 export default function ProductCard({
   product,
   priority = false,
 }: {
-  product: Product
+  product: CardProduct
   priority?: boolean
 }) {
   const hasImage =
@@ -49,10 +57,20 @@ export default function ProductCard({
       </div>
 
       {/* CTA */}
-      <div className="px-4 pb-4">
-        <span className="block rounded-lg bg-[var(--brand)] py-2 text-center text-sm font-semibold text-white transition group-hover:bg-[var(--brand-dark)]">
+      <div className="flex items-center gap-2 px-4 pb-4">
+        <span className="block flex-1 rounded-lg bg-[var(--brand)] py-2 text-center text-sm font-semibold text-white transition group-hover:bg-[var(--brand-dark)]">
           Cotizar
         </span>
+        <AddToQuoteButton
+          product={{
+            sku: product.sku,
+            name: product.name,
+            slug: product.slug,
+            image: hasImage ? product.images[0] : undefined,
+            price: product.price,
+            minQty: product.min_qty,
+          }}
+        />
       </div>
     </Link>
   )

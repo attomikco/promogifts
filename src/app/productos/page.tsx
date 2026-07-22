@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import Nav from '@/components/Nav'
 import Breadcrumbs from '@/components/Breadcrumbs'
 import ProductCatalog from '@/components/ProductCatalog'
@@ -10,18 +12,7 @@ export async function generateMetadata({
 }: {
   searchParams: Promise<{ cat?: string; q?: string }>
 }): Promise<Metadata> {
-  const { cat, q } = await searchParams
-  const activeCategory = CATEGORIES.find((c) => c.slug === cat)
-
-  if (activeCategory) {
-    return {
-      title: `${activeCategory.label} Personalizados | Artículos Promocionales`,
-      description: `Explora nuestra colección de ${activeCategory.label.toLowerCase()} promocionales personalizados con tu logo. Precios desde mayoreo, envíos a todo México. Cotiza gratis.`,
-      alternates: {
-        canonical: `https://promogifts.com.mx/productos?cat=${cat}`,
-      },
-    }
-  }
+  const { q } = await searchParams
 
   if (q) {
     return {
@@ -46,13 +37,14 @@ export default async function ProductosPage({
   searchParams: Promise<{ cat?: string; q?: string }>
 }) {
   const { cat, q } = await searchParams
-  const activeCategory = CATEGORIES.find((c) => c.slug === cat)
 
-  const breadcrumbs = [
-    { label: 'Inicio', href: '/' },
-    { label: 'Productos', href: activeCategory ? '/productos' : undefined },
-    ...(activeCategory ? [{ label: activeCategory.label }] : []),
-  ]
+  // Categories now live on dedicated SEO pages. Static redirects can't match
+  // query params, so redirect ?cat= server-side to /categoria/[slug].
+  if (cat && CATEGORIES.some((c) => c.slug === cat)) {
+    redirect(`/categoria/${cat}`)
+  }
+
+  const breadcrumbs = [{ label: 'Inicio', href: '/' }, { label: 'Productos' }]
 
   return (
     <>
@@ -60,7 +52,27 @@ export default async function ProductosPage({
       <Breadcrumbs items={breadcrumbs} />
 
       <main className="flex-1">
-        <ProductCatalog initialCategory={cat} initialQuery={q} />
+        {/* Server-rendered, indexable category links */}
+        <section className="border-b border-[var(--light)]/40 bg-white">
+          <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-[var(--mid)]">
+              Explora por categoría
+            </h2>
+            <div className="mt-4 flex flex-wrap gap-3">
+              {CATEGORIES.map((c) => (
+                <Link
+                  key={c.slug}
+                  href={`/categoria/${c.slug}`}
+                  className="rounded-full border border-[var(--light)] bg-[var(--pale)] px-4 py-2 text-sm font-medium text-[var(--mid)] transition hover:border-[var(--brand)] hover:text-[var(--brand)]"
+                >
+                  {c.emoji} {c.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <ProductCatalog initialQuery={q} />
       </main>
 
       <Footer />

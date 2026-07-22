@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { Poppins, Libre_Baskerville } from 'next/font/google'
 import Script from 'next/script'
+import { QuoteCartProvider } from '@/components/QuoteCartProvider'
+import QuoteCartWidget from '@/components/QuoteCartWidget'
 import './globals.css'
 
 const gtmId = process.env.NEXT_PUBLIC_GTM_ID
@@ -131,7 +133,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             />
           </noscript>
         )}
-        {children}
+        <QuoteCartProvider>
+          {children}
+          <QuoteCartWidget />
+        </QuoteCartProvider>
       </body>
     </html>
   )
